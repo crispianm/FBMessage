@@ -336,7 +336,7 @@ var barcharts = [
   {
     "name": "thread",
     "title": "Top 10 Threads",
-    "n_bars": 20,
+    "n_bars": 10,
     "get_data": (function(d) {return d.thread;}),
     "get_legend": (function(s){return s.substring(0,5)}),
     "get_tooltip": (function(s){return s.substring(0,40)})
@@ -352,7 +352,7 @@ var barcharts = [
   {
     "name": "sender",
     "title": "Top 10 Senders",
-    "n_bars": 20,
+    "n_bars": 10,
     "get_data": (function(d) {return d.sender_name;}),
     "get_legend": (function(s){return s.substring(0,5)}),
     "get_tooltip": (function(s){return s.substring(0,40)})
@@ -365,14 +365,14 @@ var barcharts = [
     "get_legend": (function(s){return s.substring(0,5)}),
     "get_tooltip": (function(s){return s.substring(0,40)})
   },
-  {
-    "name": "type",
-    "title": "Type of message",
-    "n_bars": "all",
-    "get_data": (function(d) {return d.type;}),
-    "get_legend": (function(s){return s.substring(0,5)}),
-    "get_tooltip": (function(s){return s.substring(0,40)})
-  },
+  // {
+  //   "name": "type",
+  //   "title": "Type of message",
+  //   "n_bars": "all",
+  //   "get_data": (function(d) {return d.type;}),
+  //   "get_legend": (function(s){return s.substring(0,5)}),
+  //   "get_tooltip": (function(s){return s.substring(0,40)})
+  // },
   {
     "name": "nb-characters",
     "title": "Number of characters",
@@ -435,18 +435,43 @@ chart = barChart({})
 
 function main(){
   parse_date();
+  console.log("Parsing done")
+
   add_sent();
+  console.log("Sent added")
+
   initialize_length_ticks();
+  console.log("Ticks initialized")
+
   initialize_crossfilter();
+  console.log("Crossfilter initialized")
+
   initialize_barchart_parameters();
+  console.log("Barchart parameters initialized")
+
   draw_barcharts();
+  console.log("Barcharts drawn")
+
   add_message_displayer();
+  console.log("Message displayer added")
+
   initialize_scatterplot();
+  console.log("Scatterplot initialized")
+
   draw_scatterplot();
+  console.log("Scatterplot drawn")
+
   draw_density_date();
+  console.log("Density date drawn")
+
   draw_density_time();
+  console.log("Density time drawn")
+
   initialize_brush();
+  console.log("Brush initialized")
+
   processingModal.style.display = "none"
+  console.log("Processing modal hidden")
 }
 
 function update_all(){
