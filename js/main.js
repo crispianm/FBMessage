@@ -336,7 +336,7 @@ var barcharts = [
   {
     "name": "thread",
     "title": "Top 10 Threads",
-    "n_bars": 10,
+    "n_bars": 20,
     "get_data": (function(d) {return d.thread;}),
     "get_legend": (function(s){return s.substring(0,5)}),
     "get_tooltip": (function(s){return s.substring(0,40)})
@@ -352,7 +352,7 @@ var barcharts = [
   {
     "name": "sender",
     "title": "Top 10 Senders",
-    "n_bars": 10,
+    "n_bars": 20,
     "get_data": (function(d) {return d.sender_name;}),
     "get_legend": (function(s){return s.substring(0,5)}),
     "get_tooltip": (function(s){return s.substring(0,40)})
