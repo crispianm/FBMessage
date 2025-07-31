@@ -34,7 +34,7 @@
       var div_density_date_2 = document.getElementById("density_date")
       var div_density_time_2 = document.getElementById("density_time")
       var div_message_displayer_2 = document.getElementById("message_displayer")
-      var div_place_holder_2 = document.getElementById("place_holder")
+      var div_place_holder_2 = document.querySelector('.bottom-left') // Updated for new layout
   }
 
   //Define margins, heights and widths
@@ -85,6 +85,9 @@
     var width = window.innerWidth;
     var height = window.innerHeight;
 
+    // Modern CSS Grid Layout - Commenting out old JavaScript layout system
+    // The layout is now handled by CSS Grid for better responsiveness
+    /*
     // Set heights
     var first_row_height = (height*0.70) + "px";
     var second_row_height = (height*0.20) + "px";
@@ -107,20 +110,12 @@
     div_place_holder_2.style.width = first_col_width;
     div_density_date_2.style.width = second_col_width;
     div_message_displayer_2.style.width = third_col_width;
+    */
 
-    var w1 = div_main_2.clientWidth - margin1.left - margin1.right;
-    var h1 = div_main_2.clientHeight - margin1.top - margin1.bottom;
-    var w2 = div_density_date_2.clientWidth - margin2.left - margin2.right;
-    var h2 = div_density_date_2.clientHeight - margin2.top - margin2.bottom;
-    var w3 = div_filters_2.clientWidth - margin3.left - margin3.right;
-    var h3 = div_filters_2.clientHeight - margin3.top - margin3.bottom;
-    var w4 = div_density_time_2.clientWidth - margin4.left - margin4.right;
-    var h4 = div_density_time_2.clientHeight - margin4.top - margin4.bottom;
-    var h5 = div_message_displayer_2.clientHeight - margin5.top - margin5.bottom;
-    var w5 = div_message_displayer_2.clientWidth - margin5.right - margin5.left;
+    // Dimensions will be calculated dynamically in calculateDimensions() function
+    var w1, h1, w2, h2, w3, h3, w4, h4, h5, w5;
 
-    margin3.inter = h3/10
-
+    // h_bar will be set after dimensions are calculated
     var h_bar = 12;
   }
 
@@ -136,10 +131,11 @@
     var explanationBtn = document.getElementById("ExplanationBtn");
 
     // Get the <span> element that closes the modal
-    var span1 = document.getElementsByClassName("close")[0];
-    var span2 = document.getElementsByClassName("close")[1];
-    var span3 = document.getElementsByClassName("close")[2];
-    explanationModal.style.display = "block";
+    var closeButtons = document.getElementsByClassName("close");
+    var span1 = closeButtons[0];
+    var span2 = closeButtons[1];
+    var span3 = closeButtons[2];
+    // explanationModal.style.display = "block"; // Splash screen removed
 
     // When the user clicks the button, open the modal
     exploreBtn.onclick = function() {
@@ -151,20 +147,26 @@
     }
 
     // When the user clicks on <span> (x), close the modal
-    span1.onclick = function() {
-        exploreModal.style.display = "none";
-        explanationModal.style.display = "none";
-        processingModal.style.display = "none";
+    if (span1) {
+        span1.onclick = function() {
+            exploreModal.style.display = "none";
+            explanationModal.style.display = "none";
+            processingModal.style.display = "none";
+        }
     }
-    span2.onclick = function() {
-        exploreModal.style.display = "none";
-        explanationModal.style.display = "none";
-        processingModal.style.display = "none";
+    if (span2) {
+        span2.onclick = function() {
+            exploreModal.style.display = "none";
+            explanationModal.style.display = "none";
+            processingModal.style.display = "none";
+        }
     }
-    span3.onclick = function() {
-        exploreModal.style.display = "none";
-        explanationModal.style.display = "none";
-        processingModal.style.display = "none";
+    if (span3) {
+        span3.onclick = function() {
+            exploreModal.style.display = "none";
+            explanationModal.style.display = "none";
+            processingModal.style.display = "none";
+        }
     }
 
     // When the user clicks anywhere outside of the modal, close it
@@ -179,44 +181,9 @@
 
   // Define the main elements : div, svg, etc..
   {
-    var div = d3.select("body").append("div")
-        .attr("class", "tooltip")
-        .style("opacity", 0);
-
-    var body = d3.select("body");
-
-    var density_date = div_density_date
-        .append("svg")
-        .attr("height", (h2 + margin2.top + margin2.bottom))
-        .attr("width", (w2 + margin2.left + margin2.right));
-
-    var density_time = div_density_time
-        .append("svg")
-        .attr("height", (h4 + margin4.top + margin4.bottom))
-        .attr("width", (w4 + margin4.left + margin4.right));
-
-    var axis_time_focus = div_main
-        .append("svg")
-        .attr("width", margin1.left)
-        .attr("height", h1 + margin1.bottom + margin1.top);
-
-    var canvas = div_main
-        .append("canvas")
-        .attr("width", w1)
-        .attr("height", h1)
-        .style("padding-top", margin1.top + "px")
-        .style("vertical-align", "top")
-
-    var canvas_el = document.querySelector("canvas");
-    var context_canvas = canvas_el.getContext("2d");
-
-    var axis_date_focus = div_main
-        .append("svg")
-        .attr("width", (w1 + margin1.left + margin1.right))
-        .attr("height", margin1.bottom)
-        .style("position", "absolute")
-        .style("left", 0 + "px")
-        .style("top", (margin1.top + h1) + "px");
+  // Canvas and SVG elements will be created in updateScalesAndElements() after dimensions are calculated
+  // Declare variables that will be initialized later
+  var div, body, density_date, density_time, axis_time_focus, canvas, canvas_el, context_canvas, axis_date_focus;
   }
 
   //Define parsers
@@ -233,41 +200,23 @@
     max_time.setHours(23, 59, 59)
   }
 
-  // Define scales and axes
+  // Define scales and axes - ranges will be set in updateScalesAndElements()
   {
     //Main canvas
-    var x1 = d3.scaleTime()
-              .range([0, w1]);
-
-    var y1 = d3.scaleTime()
-              .range([0,h1]);
-
-    var xAxis1 = d3.axisBottom()
-              .scale(x1);
-
-    var yAxis1 = d3.axisLeft()
-              .scale(y1);
+    var x1 = d3.scaleTime();
+    var y1 = d3.scaleTime();
+    var xAxis1 = d3.axisBottom().scale(x1);
+    var yAxis1 = d3.axisLeft().scale(y1);
 
     // Density date
-    var x2 = d3.scaleTime()
-              .range([0, w2]);
-
-    var y2 = d3.scaleLinear()
-              .range([h2,0]);
-
-    var xAxis2 = d3.axisBottom()
-                .scale(x2);
+    var x2 = d3.scaleTime();
+    var y2 = d3.scaleLinear();
+    var xAxis2 = d3.axisBottom().scale(x2);
 
     // Density time
-    var x4 = d3.scaleLinear()
-                .range([0, w4]);
-
-    var y4 = d3.scaleTime()
-              .range([0, h4])
-              .domain([min_time, max_time]);
-
-    var yAxis4 = d3.axisLeft()
-              .scale(y4);
+    var x4 = d3.scaleLinear();
+    var y4 = d3.scaleTime().domain([min_time, max_time]);
+    var yAxis4 = d3.axisLeft().scale(y4);
 
     // Scale to convert numbers to labels and keep the correct order in barcharts
     var num_to_day = d3.scaleOrdinal()
@@ -284,15 +233,10 @@
 
   }
 
-  // Define brush and zoom
+  // Define brush and zoom - extents will be set in updateScalesAndElements()
   {
-    var brush_date = d3.brushX()
-        .extent([[0, margin2.top], [w2, margin2.top + h2]])
-        .on("brush end", brushed_date);
-
-    var brush_time = d3.brushY()
-        .extent([[margin4.left, 0], [margin4.left + w4, h4]])
-        .on("brush end", brushed_time);
+    var brush_date = d3.brushX().on("brush end", brushed_date);
+    var brush_time = d3.brushY().on("brush end", brushed_time);
   }
 
   // Define message_displayer
@@ -394,15 +338,28 @@ function initialize_barchart_parameters() {
     bc.isColoredBarchart = false
     bc.xScale = d3.scaleLinear().range([0, w3])
 
-    bc.div = div_filters.append("div").attr("class", "barchart-div " + bc.name)
+    bc.div = div_filters.append("div")
+        .attr("class", "barchart-div " + bc.name + " hover-lift")
 
+    // Modern chart header with enhanced styling
     bc.div_header = bc.div.append("div")
+        .attr("class", "chart-header")
         .style("display", "flex")
         .style("align-items", "center")
+        .style("justify-content", "space-between")
+        .style("margin-bottom", "var(--spacing-md)")
+        .style("padding-bottom", "var(--spacing-md)")
+        .style("border-bottom", "1px solid var(--border-color)")
 
-    bc.div_img = bc.div_header.append("div")
-        .attr("width", "15 px")
-        .style("float", "left")
+    // Left side - icon and title
+    bc.title_container = bc.div_header.append("div")
+        .style("display", "flex")
+        .style("align-items", "center")
+        .style("gap", "var(--spacing-md)")
+
+    bc.div_img = bc.title_container.append("div")
+        .style("display", "flex")
+        .style("align-items", "center")
 
     bc.img = bc.div_img.append("img")
         .attr("class", "img-color")
@@ -410,68 +367,303 @@ function initialize_barchart_parameters() {
         .attr("height", "20px")
         .attr("width", "20px")
         .attr("onclick", 'define_colored_barchart("' + bc.name + '")')
-        .on("mouseover", function(d){this.height = 22; this.width = 22; })
-        .on("mouseout", function(d){this.height = 20; this.width = 20; })
+        .attr("class", "color-icon-hover") // Add class for CSS hover instead of JS
 
-    bc.title_element = bc.div_header
-        .append("div")
-        .style("float", "left")
-        .style("margin-left", "20px")
-        .append("h1");
-
-    bc.title_element
+    bc.title_element = bc.title_container.append("h3")
         .attr("class", "title_barchart")
-        .attr("text-anchor", "start")
-        .style("margin", "2px")
         .text(bc.title);
 
+    // Right side - controls container
+    bc.controls_container = bc.div_header.append("div")
+        .attr("class", "chart-controls")
+        .style("display", "flex")
+        .style("align-items", "center")
+        .style("gap", "var(--spacing-sm)")
+
+    // Add search functionality for thread barchart with modern styling
+    if (bc.name === "thread") {
+      console.log("Creating modern search elements for thread barchart");
+      
+      bc.search_container = bc.controls_container
+          .append("div")
+          .attr("class", "search-container")
+          .style("display", "flex")
+          .style("align-items", "center")
+          .style("gap", "var(--spacing-sm)")
+
+      bc.search_input = bc.search_container
+          .append("input")
+          .attr("type", "text")
+          .attr("class", "search-input")
+          .attr("placeholder", "🔍 Search threads...")
+          .style("display", "none")
+          .on("input", (function(currentBc) {
+            return function() {
+              filter_threads(this.value, currentBc);
+            };
+          })(bc))
+          .on("keydown", (function(currentBc) {
+            return function() {
+              if (d3.event.keyCode === 27) { // Escape key
+                toggle_thread_search(currentBc);
+              } else if (d3.event.keyCode === 13) { // Enter key
+                apply_thread_filter(currentBc);
+              }
+            };
+          })(bc));
+
+      bc.search_icon = bc.search_container
+          .append("div")
+          .attr("class", "search-icon")
+          .style("cursor", "pointer")
+          .style("padding", "var(--spacing-xs)")
+          .style("border-radius", "var(--radius-sm)")
+          .style("transition", "var(--transition-fast)")
+          .html("🔍")
+          .on("click", (function(currentBc) {
+            return function() {
+              console.log("Modern search icon clicked for:", currentBc.name);
+              toggle_thread_search(currentBc);
+            };
+          })(bc))
+          .on("mouseover", function() {
+            d3.select(this).style("background", "rgba(255, 255, 255, 0.1)");
+          })
+          .on("mouseout", function() {
+            d3.select(this).style("background", "none");
+          });
+          
+      console.log("Modern search elements created:", bc.search_input, bc.search_icon);
+    }
 
     bc.div_body = bc.div.append("div")
+        .attr("class", "chart-body")
   }
 }
 
 // Create the function that will create all barcharts.
 chart = barChart({})
 
+// Function to calculate dimensions after CSS Grid layout is ready
+function calculateDimensions() {
+  // Calculate dimensions based on CSS Grid layout with fallback values
+  w1 = Math.max(div_main_2.clientWidth - margin1.left - margin1.right, 600);
+  h1 = Math.max(div_main_2.clientHeight - margin1.top - margin1.bottom, 400);
+  w2 = Math.max(div_density_date_2.clientWidth - margin2.left - margin2.right, 600);
+  h2 = Math.max(div_density_date_2.clientHeight - margin2.top - margin2.bottom, 150);
+  w3 = Math.max(div_filters_2.clientWidth - margin3.left - margin3.right, 300);
+  h3 = Math.max(div_filters_2.clientHeight - margin3.top - margin3.bottom, 400);
+  w4 = Math.max(div_density_time_2.clientWidth - margin4.left - margin4.right, 150);
+  h4 = Math.max(div_density_time_2.clientHeight - margin4.top - margin4.bottom, 400);
+  h5 = Math.max(div_message_displayer_2.clientHeight - margin5.top - margin5.bottom, 150);
+  w5 = Math.max(div_message_displayer_2.clientWidth - margin5.right - margin5.left, 300);
+  
+  // Update margin3.inter based on new h3
+  margin3.inter = h3/10;
+  
+  // Debug logging for dimensions
+  console.log('Dimensions calculated after CSS Grid ready:', {
+    w1: w1, h1: h1,
+    mainClientWidth: div_main_2.clientWidth,
+    mainClientHeight: div_main_2.clientHeight,
+    margins: margin1
+  });
+  
+  // Recreate scales with new dimensions
+  updateScalesAndElements();
+}
+
+// Function to update scales and canvas elements with new dimensions
+function updateScalesAndElements() {
+  console.log("=== Updating scales and elements ===");
+  console.log("Dimensions: w1=" + w1 + ", h1=" + h1 + ", w2=" + w2 + ", h2=" + h2 + ", w4=" + w4 + ", h4=" + h4);
+  
+  // Create tooltip if it doesn't exist
+  if (!div) {
+    div = d3.select("body").append("div")
+        .attr("class", "tooltip")
+        .style("opacity", 0);
+  }
+  
+  // Set body reference
+  body = d3.select("body");
+  
+  // Update scales with proper ranges
+  x1.range([0, w1]);
+  y1.range([0, h1]);
+  x2.range([0, w2]);
+  y2.range([h2, 0]);
+  x4.range([0, w4]);
+  y4.range([0, h4]);
+  
+  console.log("Scales updated:", {
+    x1: x1.range(),
+    y1: y1.range(),
+    x2: x2.range(),
+    y2: y2.range(),
+    x4: x4.range(),
+    y4: y4.range()
+  });
+  
+  // Update barchart scales
+  barcharts.forEach(function(bc) {
+    if (bc.xScale) {
+      bc.xScale.range([0, w3]);
+    }
+  });
+  
+  // Only remove main canvas and SVG elements, keep density SVGs if they exist
+  div_main.selectAll("canvas").remove();
+  div_main.selectAll("svg").remove();
+  
+  // Create/recreate density SVGs only if they don't exist or are wrong size
+  if (!density_date || !density_date.node()) {
+    div_density_date.selectAll("svg").remove();
+    density_date = div_density_date
+        .append("svg")
+        .attr("height", (h2 + margin2.top + margin2.bottom))
+        .attr("width", (w2 + margin2.left + margin2.right));
+    console.log("Created new density_date SVG");
+  } else {
+    // Update existing SVG dimensions
+    density_date
+        .attr("height", (h2 + margin2.top + margin2.bottom))
+        .attr("width", (w2 + margin2.left + margin2.right));
+    console.log("Updated existing density_date SVG");
+  }
+
+  if (!density_time || !density_time.node()) {
+    div_density_time.selectAll("svg").remove();
+    density_time = div_density_time
+        .append("svg")
+        .attr("height", (h4 + margin4.top + margin4.bottom))
+        .attr("width", (w4 + margin4.left + margin4.right));
+    console.log("Created new density_time SVG");
+  } else {
+    // Update existing SVG dimensions
+    density_time
+        .attr("height", (h4 + margin4.top + margin4.bottom))
+        .attr("width", (w4 + margin4.left + margin4.right));
+    console.log("Updated existing density_time SVG");
+  }
+  
+  // Recreate main canvas and SVG elements
+  canvas = div_main
+      .append("canvas")
+      .attr("width", w1)
+      .attr("height", h1)
+      .style("padding-top", margin1.top + "px")
+      .style("vertical-align", "top");
+
+  canvas_el = document.querySelector("canvas");
+  context_canvas = canvas_el.getContext("2d");
+
+  axis_time_focus = div_main
+      .append("svg")
+      .attr("width", margin1.left)
+      .attr("height", h1 + margin1.bottom + margin1.top);
+
+  axis_date_focus = div_main
+      .append("svg")
+      .attr("width", (w1 + margin1.left + margin1.right))
+      .attr("height", margin1.bottom)
+      .style("position", "absolute")
+      .style("left", 0 + "px")
+      .style("top", (margin1.top + h1) + "px");
+      
+  console.log("SVG elements created:", {
+    canvas: !!canvas_el,
+    density_date: !!density_date.node(),
+    density_time: !!density_time.node()
+  });
+      
+  // Update brushes with new dimensions
+  brush_date.extent([[0, margin2.top], [w2, margin2.top + h2]]);
+  brush_time.extent([[margin4.left, 0], [margin4.left + w4, h4]]);
+  
+  console.log("=== Scales and elements update completed ===");
+}
+
 function main(){
-  parse_date();
-  console.log("Parsing done")
+  console.log("=== Starting main() function ===");
+  
+  // Show skeleton loading
+  if (typeof showSkeletonLoading === 'function') {
+    showSkeletonLoading();
+  }
 
-  add_sent();
-  console.log("Sent added")
+  // Wait for CSS Grid to stabilize, then calculate dimensions
+  setTimeout(function() {
+    console.log("--- Phase 1: Setup ---");
+    calculateDimensions();
+    
+    parse_date();
+    console.log("✓ Parsing done")
 
-  initialize_length_ticks();
-  console.log("Ticks initialized")
+    add_sent();
+    console.log("✓ Sent added")
 
-  initialize_crossfilter();
-  console.log("Crossfilter initialized")
+    initialize_length_ticks();
+    console.log("✓ Ticks initialized")
 
-  initialize_barchart_parameters();
-  console.log("Barchart parameters initialized")
+    initialize_crossfilter();
+    console.log("✓ Crossfilter initialized")
 
-  draw_barcharts();
-  console.log("Barcharts drawn")
+    console.log("--- Phase 2: UI Components ---");
+    initialize_barchart_parameters();
+    console.log("✓ Barchart parameters initialized")
 
-  add_message_displayer();
-  console.log("Message displayer added")
+    // Hide skeleton loading before drawing charts
+    if (typeof hideSkeletonLoading === 'function') {
+      hideSkeletonLoading();
+    }
 
-  initialize_scatterplot();
-  console.log("Scatterplot initialized")
+    console.log("--- Phase 3: Chart Drawing ---");
+    draw_barcharts();
+    console.log("✓ Barcharts drawn")
 
-  draw_scatterplot();
-  console.log("Scatterplot drawn")
+    initialize_scatterplot();
+    console.log("✓ Scatterplot initialized")
 
-  draw_density_date();
-  console.log("Density date drawn")
+    // Initialize time scale domain for density time chart
+    y1.domain([min_time, max_time]);
+    console.log("✓ Time domains set")
 
-  draw_density_time();
-  console.log("Density time drawn")
+    draw_scatterplot();
+    console.log("✓ Scatterplot drawn")
 
-  initialize_brush();
-  console.log("Brush initialized")
+    add_message_displayer();
+    console.log("✓ Message displayer added")
 
-  processingModal.style.display = "none"
-  console.log("Processing modal hidden")
+    // Verify all elements before drawing density charts
+    verifyElements();
+
+    draw_density_date();
+    console.log("✓ Density date drawn")
+
+    draw_density_time();
+    console.log("✓ Density time drawn")
+
+    initialize_brush();
+    console.log("✓ Brush initialized")
+
+    // Initialize message display with placeholder text
+    clearMessageDisplay();
+
+    // Initialize modern UI features
+    setTimeout(() => {
+      if (typeof initializeModernUI === 'function') {
+        initializeModernUI();
+      }
+      if (typeof addChartAnimations === 'function') {
+        addChartAnimations();
+      }
+    }, 100);
+
+    processingModal.style.display = "none"
+    console.log("✓ Processing modal hidden")
+    console.log("=== main() function completed ===");
+  }, 50); // Short delay to ensure CSS Grid is ready
 }
 
 function update_all(){
@@ -507,11 +699,29 @@ function draw_barcharts(){
   for(j=0; j<barcharts.length; j++){
     bc = barcharts[j]
 
-    if (bc.n_bars=="all"){
-      bc.nested_data =  bc.group.all()
+    // Handle search filtering for thread barchart
+    if (bc.name === "thread" && bc.isSearchFiltered && bc.searchTerm) {
+      // Apply search filter when redrawing
+      var searchTermLower = bc.searchTerm.toLowerCase();
+      var allThreads = bc.group.all();
+      var filteredThreads = allThreads.filter(function(thread) {
+        return thread.key.toLowerCase().indexOf(searchTermLower) !== -1;
+      });
+      
+      // Sort by message count (descending)
+      filteredThreads.sort(function(a, b) {
+        return b.value - a.value;
+      });
+      
+      bc.nested_data = filteredThreads;
     } else {
-      bc.nested_data = bc.group.top(bc.n_bars)
-    };
+      // Normal behavior for all other barcharts or thread without search
+      if (bc.n_bars=="all"){
+        bc.nested_data =  bc.group.all()
+      } else {
+        bc.nested_data = bc.group.top(bc.n_bars)
+      };
+    }
 
     bc.div_body.select("svg").remove()
     chart(bc)
@@ -578,6 +788,17 @@ function reset_filters(){
   // Reset the filter for each dimension
   dimensions = barcharts.map(x=>x.dimension)
   dimensions.forEach(resetDimensionFilter);
+  
+  // Clear thread search if it exists
+  barcharts.forEach(function(bc) {
+    if (bc.name === "thread" && bc.search_input) {
+      bc.search_input.property("value", "");
+      bc.search_input.style("display", "none");
+      bc.searchTerm = "";
+      bc.isSearchFiltered = false;
+    }
+  });
+  
   // Update all charts to match nw filters
   update_all();
   // Reset the brush position
@@ -707,38 +928,125 @@ function parse_date(){
 };
 
 function draw_density_date(){
-  // Draw the horizontal curve for density of messages along date of year
-  density_date.selectAll(".area").remove();
-  density_date.selectAll(".axis--x").remove();
+  console.log("=== Starting draw_density_date ===");
+  
+  // Check if density_date SVG exists
+  if (!density_date || !density_date.node()) {
+    console.error("Density date SVG not available");
+    return;
+  }
+  
+  // Check if crossfilter data exists
+  if (!group_date) {
+    console.error("group_date not initialized");
+    return;
+  }
 
-  nested_data_date = group_date.all()
-  nested_data_date = d3.nest()
-                          .key(function(d){ return d.key.getWeek() + '-' + d.key.getMonth() + '-' + d.key.getFullYear();})
-                          .rollup(function(leaves) { return d3.sum(leaves, function(d) {return parseFloat(d.value);})})
-                          .entries(nested_data_date)
+  // Clear existing content
+  density_date.selectAll("*").remove();
 
-  nested_data_date = nested_data_date.sort(sortByDateAscending);
+  // Get raw data from crossfilter
+  var rawData = group_date.all();
+  console.log("Raw date data points:", rawData.length);
+  
+  if (rawData.length === 0) {
+    console.warn("No raw date data available");
+    return;
+  }
 
-  var max_message = d3.max(nested_data_date, function(d){return d.value});
+  // Process data for weekly aggregation
+  var nested_data_date = d3.nest()
+    .key(function(d){ 
+      try {
+        return d.key.getWeek() + '-' + d.key.getMonth() + '-' + d.key.getFullYear();
+      } catch (e) {
+        console.warn("Error processing date key:", d.key, e);
+        return "invalid";
+      }
+    })
+    .rollup(function(leaves) { 
+      return d3.sum(leaves, function(d) {return parseFloat(d.value);})
+    })
+    .entries(rawData);
 
-  y2.domain([0, max_message]);
+  // Filter out invalid entries and sort
+  nested_data_date = nested_data_date
+    .filter(d => d.key !== "invalid")
+    .sort(sortByDateAscending);
 
+  console.log("Processed date data points:", nested_data_date.length);
+
+  if (nested_data_date.length === 0) {
+    console.warn("No valid processed date data");
+    return;
+  }
+
+  // Set domains
+  var dateExtent = d3.extent(nested_data_date, function(d) {
+    try {
+      return parseUTCDate2(d.key);
+    } catch (e) {
+      console.warn("Error parsing date:", d.key, e);
+      return null;
+    }
+  }).filter(d => d !== null);
+
+  if (dateExtent.length !== 2) {
+    console.error("Could not determine date extent");
+    return;
+  }
+
+  x2.domain(dateExtent);
+  
+  var maxValue = d3.max(nested_data_date, function(d){return d.value});
+  y2.domain([0, maxValue]);
+  
+  console.log("Domains set - x2:", x2.domain(), "y2:", y2.domain());
+  console.log("Ranges - x2:", x2.range(), "y2:", y2.range());
+
+  // Create area function
   var area = d3.area()
     .curve(d3.curveBasisOpen)
-    .x(function(d) { return x2(parseUTCDate2(d.key));})
+    .x(function(d) { 
+      try {
+        return x2(parseUTCDate2(d.key));
+      } catch (e) {
+        console.warn("Error in area x function:", d.key, e);
+        return 0;
+      }
+    })
     .y0(h2)
-    .y1(function(d) { return y2(d.value); });
+    .y1(function(d) { 
+      return y2(d.value);
+    });
 
-  density_date.append("path")
+  // Draw the area
+  try {
+    density_date.append("path")
       .datum(nested_data_date)
       .attr("class", "area")
       .attr("d", area)
-      .attr('transform', 'translate(' + margin2.left + ',' + (margin2.top) + ')')
+      .attr('transform', 'translate(' + margin2.left + ',' + margin2.top + ')');
+    
+    console.log("✓ Area path created successfully");
+  } catch (error) {
+    console.error("Error creating area path:", error);
+    return;
+  }
 
-  density_date.append('g')
-    .attr('transform', 'translate(' + margin2.left + ',' + (h2 + margin2.top) + ')')
-    .attr('class', 'x axis--x')
-    .call(xAxis2);
+  // Add axis
+  try {
+    density_date.append('g')
+      .attr('transform', 'translate(' + margin2.left + ',' + (h2 + margin2.top) + ')')
+      .attr('class', 'x axis--x')
+      .call(xAxis2);
+    
+    console.log("✓ X-axis created successfully");
+  } catch (error) {
+    console.error("Error creating x-axis:", error);
+  }
+  
+  console.log("=== draw_density_date completed ===");
 }
 
 function update_density_date(){
@@ -769,29 +1077,87 @@ function update_density_date(){
 }
 
 function draw_density_time(){
-  // Draw the vertical curve for density of messages along time of day
-  density_time.selectAll().remove()
-  nested_data_time = group_time.all();
-  var max_message = d3.max(nested_data_time, function(d){return d.value});
+  console.log("=== Starting draw_density_time ===");
+  
+  // Check if density_time SVG exists
+  if (!density_time || !density_time.node()) {
+    console.error("Density time SVG not available");
+    return;
+  }
+  
+  // Check if crossfilter data exists
+  if (!group_time) {
+    console.error("group_time not initialized");
+    return;
+  }
 
-  x4.domain([0, max_message]);
+  // Clear existing content
+  density_time.selectAll("*").remove();
+  
+  // Get raw data from crossfilter
+  var rawData = group_time.all();
+  console.log("Raw time data points:", rawData.length);
+  
+  if (rawData.length === 0) {
+    console.warn("No raw time data available");
+    return;
+  }
+  
+  // Use the data directly without complex nesting
+  var nested_data_time = rawData.filter(d => d.value > 0);
+  console.log("Filtered time data points:", nested_data_time.length);
+  
+  if (nested_data_time.length === 0) {
+    console.warn("No valid time data after filtering");
+    return;
+  }
 
+  // Set domains
+  var maxValue = d3.max(nested_data_time, function(d){return d.value});
+  x4.domain([0, maxValue]);
+  
+  // y4 domain should already be set to [min_time, max_time]
+  console.log("Domains set - x4:", x4.domain(), "y4:", y4.domain());
+  console.log("Ranges - x4:", x4.range(), "y4:", y4.range());
+
+  // Create area function
   var area = d3.area()
     .curve(d3.curveBasisOpen)
-    .y(function(d) { return y4(d.key);})
+    .y(function(d) { 
+      return y4(d.key);
+    })
     .x0(0)
-    .x1(function(d) { return x4(d.value); });
+    .x1(function(d) { 
+      return x4(d.value);
+    });
 
-  density_time.append("path")
+  // Draw the area
+  try {
+    density_time.append("path")
       .datum(nested_data_time)
       .attr("class", "area")
       .attr("d", area)
-      .attr('transform', 'translate(' + margin4.left + ',' + (margin4.top) + ')');
+      .attr('transform', 'translate(' + margin4.left + ',' + margin4.top + ')');
+    
+    console.log("✓ Time area path created successfully");
+  } catch (error) {
+    console.error("Error creating time area path:", error);
+    return;
+  }
 
-  density_time.append('g')
-    .attr('transform', 'translate(' + margin4.left + ',' + (margin4.top) + ')')
-    .attr('class', function(d) {return 'y axis--y'})
-    .call(yAxis4);
+  // Add axis
+  try {
+    density_time.append('g')
+      .attr('transform', 'translate(' + margin4.left + ',' + margin4.top + ')')
+      .attr('class', 'y axis--y')
+      .call(yAxis4);
+    
+    console.log("✓ Y-axis created successfully");
+  } catch (error) {
+    console.error("Error creating y-axis:", error);
+  }
+  
+  console.log("=== draw_density_time completed ===");
 }
 
 function update_density_time(){
@@ -843,12 +1209,26 @@ function brushed_time() {
 }
 
 function draw_scatterplot(){
+  // Check if canvas and context are available
+  if (!canvas_el || !context_canvas) {
+    console.error("Canvas or context not available for scatterplot");
+    return;
+  }
+  
   // Remove all the dots on the scatterplot, and redraw everything :
   // - based on the filtered datapoints
   // - based on the correct vertical and horizontal scales
   // - with the correct colors
   context_canvas.clearRect(0, 0, canvas_el.width, canvas_el.height);
-  messages.allFiltered().forEach(function(d){
+  
+  if (!messages) {
+    console.error("Messages crossfilter not initialized");
+    return;
+  }
+  
+  var filteredMessages = messages.allFiltered();
+  
+  filteredMessages.forEach(function(d){
     //Plot one dot
     context_canvas.beginPath();
     if (coloredBarchart && colorScale.domain().includes(coloredBarchart.get_data(d))){
@@ -857,10 +1237,41 @@ function draw_scatterplot(){
       context_canvas.fillStyle = color_base;
     }
     context_canvas.globalAlpha = 0.1;
-    context_canvas.arc(x1(d.date), y1(d.timeSeconds), 2, 0,  2 * Math.PI, true);
-    context_canvas.fill()
+    
+    // Calculate positions
+    var xPos = x1(d.date);
+    var yPos = y1(d.timeSeconds);
+    
+    // Only draw if positions are valid
+    if (!isNaN(xPos) && !isNaN(yPos) && xPos >= 0 && xPos <= w1 && yPos >= 0 && yPos <= h1) {
+      context_canvas.arc(xPos, yPos, 2, 0, 2 * Math.PI, true);
+      context_canvas.fill();
+    }
     context_canvas.closePath();
-  })
+  });
+}
+
+// Debug helper function
+function debugScatterPlot() {
+  console.log("=== Scatter Plot Debug Info ===");
+  console.log("Canvas element:", canvas_el);
+  console.log("Canvas context:", context_canvas);
+  console.log("Canvas dimensions:", canvas_el ? {width: canvas_el.width, height: canvas_el.height} : "Canvas not found");
+  console.log("Scale domains:", {
+    x1: x1.domain(),
+    y1: y1.domain()
+  });
+  console.log("Scale ranges:", {
+    x1: x1.range(),
+    y1: y1.range()
+  });
+  console.log("Container dimensions:", {
+    w1: w1, h1: h1,
+    containerWidth: div_main_2.clientWidth,
+    containerHeight: div_main_2.clientHeight
+  });
+  console.log("Messages count:", messages ? messages.size() : "Messages not initialized");
+  console.log("Filtered messages count:", messages ? messages.allFiltered().length : "Messages not initialized");
 }
 
 getDate = function(date){
@@ -911,4 +1322,172 @@ function load_demo(json_file){
   messages_array = json_file["messages_array"];
   user_name = get_username()
   main();
+}
+
+// Thread search functionality
+function toggle_thread_search(bc) {
+  // Check if search elements exist
+  if (!bc.search_input || !bc.search_input.node()) {
+    console.error("Search input not found for barchart:", bc.name);
+    return;
+  }
+  
+  var input = bc.search_input.node();
+  var isVisible = bc.search_input.style("display") !== "none";
+  
+  if (isVisible) {
+    // Hide search input and clear filter
+    bc.search_input.style("display", "none");
+    bc.search_input.property("value", "");
+    clear_thread_filter(bc);
+  } else {
+    // Show search input and focus it
+    bc.search_input.style("display", "inline-block");
+    setTimeout(function() {
+      input.focus();
+    }, 100);
+  }
+}
+
+function filter_threads(searchTerm, bc) {
+  if (!bc.dimension) {
+    console.error("Dimension not found for barchart:", bc.name);
+    return;
+  }
+  
+  if (!searchTerm || searchTerm.trim() === "") {
+    clear_thread_filter(bc);
+    return;
+  }
+  
+  // Filter threads that contain the search term (case-insensitive)
+  var searchTermLower = searchTerm.toLowerCase();
+  
+  // Instead of filtering the dimension, we'll filter the display
+  // Get all threads and filter them for display
+  var allThreads = bc.group.all();
+  var filteredThreads = allThreads.filter(function(thread) {
+    return thread.key.toLowerCase().indexOf(searchTermLower) !== -1;
+  });
+  
+  // Sort by message count (descending) and take top results
+  filteredThreads.sort(function(a, b) {
+    return b.value - a.value;
+  });
+  
+  // Update the nested_data to show only matching threads
+  bc.nested_data = filteredThreads;
+  
+  // Redraw just this barchart to show filtered results
+  bc.div_body.select("svg").remove();
+  chart(bc);
+}
+
+function clear_thread_filter(bc) {
+  if (!bc.dimension) {
+    console.error("Dimension not found for barchart:", bc.name);
+    return;
+  }
+  
+  // Clear search state
+  bc.searchTerm = "";
+  bc.isSearchFiltered = false;
+  
+  // Clear any applied filter on the dimension (if any)
+  bc.dimension.filter(null);
+  bc.isFiltered = false;
+  
+  // Reset to show top 20 threads (original behavior)
+  if (bc.n_bars == "all") {
+    bc.nested_data = bc.group.all();
+  } else {
+    bc.nested_data = bc.group.top(bc.n_bars);
+  }
+  
+  // Redraw just this barchart
+  bc.div_body.select("svg").remove();
+  chart(bc);
+  
+  // Update other charts if there was a filter applied
+  if (bc.wasFiltered) {
+    bc.wasFiltered = false;
+    update_all();
+  }
+}
+
+function apply_thread_filter(bc) {
+  var searchTerm = bc.search_input.property("value");
+  if (!searchTerm || searchTerm.trim() === "") {
+    return;
+  }
+  
+  // Mark the barchart as having an active search filter
+  bc.searchTerm = searchTerm;
+  bc.isSearchFiltered = true;
+  
+  // Hide the search input
+  bc.search_input.style("display", "none");
+  
+  // Keep the current filtered display but make threads clickable
+  // The filtering is already handled by filter_threads function
+}
+
+// Function to clear message display
+function clearMessageDisplay() {
+  if (typeof md_sender !== 'undefined' && md_sender) {
+    md_sender.select("p").remove();
+    md_sender.append("p").attr("class", "md_text").text("Hover over a data point to see message details");
+  }
+  if (typeof md_thread !== 'undefined' && md_thread) {
+    md_thread.select("p").remove();
+    md_thread.append("p").attr("class", "md_text").text("Thread information will appear here");
+  }
+  if (typeof md_message !== 'undefined' && md_message) {
+    md_message.select("p").remove();
+    md_message.append("p").attr("class", "md_text").text("Message content will appear here");
+  }
+  if (typeof md_datetime !== 'undefined' && md_datetime) {
+    md_datetime.select("p").remove();
+    md_datetime.append("p").attr("class", "md_text").text("Date and time will appear here");
+  }
+}
+
+// Google Analytics stub to prevent errors
+function gtag() {
+  // Google Analytics function stub - replace with actual implementation if needed
+}
+
+// Function to verify all elements are properly created
+function verifyElements() {
+  console.log("=== Element Verification ===");
+  console.log("div_density_date element:", !!div_density_date);
+  console.log("div_density_time element:", !!div_density_time);
+  console.log("density_date SVG:", density_date ? !!density_date.node() : "undefined");
+  console.log("density_time SVG:", density_time ? !!density_time.node() : "undefined");
+  
+  if (density_date && density_date.node()) {
+    console.log("density_date SVG dimensions:", {
+      width: density_date.attr("width"),
+      height: density_date.attr("height")
+    });
+  }
+  
+  if (density_time && density_time.node()) {
+    console.log("density_time SVG dimensions:", {
+      width: density_time.attr("width"), 
+      height: density_time.attr("height")
+    });
+  }
+  
+  console.log("Crossfilter groups:", {
+    group_date: !!group_date,
+    group_time: !!group_time
+  });
+  
+  if (group_date) {
+    console.log("group_date data length:", group_date.all().length);
+  }
+  if (group_time) {
+    console.log("group_time data length:", group_time.all().length);
+  }
 }

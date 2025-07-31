@@ -155,33 +155,6 @@ li:not(:first-child) {
   font-weight: 400;
 }
 
-/* Density chart axis styling */
-#density_date .axis--x line,
-#density_date .axis--x path {
-  stroke: var(--text-secondary);
-  stroke-width: 1px;
-}
-
-#density_date .axis--x text {
-  fill: var(--text-secondary);
-  font-family: var(--font-primary);
-  font-size: 11px;
-  font-weight: 400;
-}
-
-#density_time .axis--y line,
-#density_time .axis--y path {
-  stroke: var(--text-secondary);
-  stroke-width: 1px;
-}
-
-#density_time .axis--y text {
-  fill: var(--text-secondary);
-  font-family: var(--font-primary);
-  font-size: 11px;
-  font-weight: 400;
-}
-
 /* Modern Chart Containers */
 .barchart-div {
   margin: var(--spacing-md) 0;
@@ -208,8 +181,8 @@ li:not(:first-child) {
 }
 
 .barchart-div:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-lg), var(--shadow-glow);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
   background: rgba(255, 255, 255, 0.08);
 }
 
@@ -223,15 +196,6 @@ li:not(:first-child) {
   fill: url(#chartGradient);
   clip-path: url(#clip);
   transition: var(--transition-normal);
-}
-
-/* Fallback area styling for density charts */
-#density_date .area,
-#density_time .area {
-  fill: var(--accent-blue);
-  fill-opacity: 0.6;
-  stroke: var(--accent-blue);
-  stroke-width: 1px;
 }
 
 .zoom {
@@ -280,7 +244,9 @@ li:not(:first-child) {
   transition: var(--transition-fast);
 }
 
-/* Removed .bar-element:hover to prevent jittering */
+.bar-element:hover {
+  transform: translateX(2px);
+}
 
 .unclicked {
   opacity: 0.4;
@@ -314,19 +280,6 @@ li:not(:first-child) {
 .img-color:hover {
   background: rgba(255, 255, 255, 0.1);
   transform: scale(1.1);
-}
-
-/* Modern hover effect for color icons without jittering */
-.color-icon-hover {
-  transition: var(--transition-fast);
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-}
-
-.color-icon-hover:hover {
-  background: rgba(0, 212, 255, 0.1);
-  transform: scale(1.1);
-  box-shadow: 0 0 8px rgba(0, 212, 255, 0.3);
 }
 
 .legend_hist_num {
@@ -365,168 +318,163 @@ li:not(:first-child) {
   word-wrap: break-word;
 }
 
-/* Additional Layout Enhancements */
-.spacer {
-  min-height: 1px; /* Minimal content for valid CSS rule */
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
 }
 
-.bottom-chart {
-  background: var(--card-bg);
-  backdrop-filter: blur(10px);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-lg);
-  padding: var(--spacing-lg);
-  height: 100%;
-  overflow: hidden;
+::-webkit-scrollbar-track {
+  background: transparent;
 }
 
-.message-panel {
-  background: var(--card-bg);
-  backdrop-filter: blur(10px);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-lg);
-  padding: var(--spacing-lg);
-  overflow-y: auto;
-  height: 100%;
+::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: var(--radius-sm);
 }
 
-/* Header Sections */
-.filters-header,
-.panel-header,
-.chart-header {
-  margin-bottom: var(--spacing-lg);
-  text-align: center;
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary);
 }
 
-.filters-subtitle,
-.panel-subtitle {
-  color: var(--text-muted);
-  font-size: 13px;
-  margin: var(--spacing-xs) 0 0 0;
-  opacity: 0.8;
-}
-
-.filters-header h2,
-.panel-header h3,
-.chart-header h3 {
-  margin: 0 0 var(--spacing-xs) 0;
-  font-family: var(--font-display);
-  font-weight: 600;
-}
-
-/* Message Field Styling */
-.message-field {
-  margin-bottom: var(--spacing-lg);
-  padding: var(--spacing-md);
-  background: rgba(255, 255, 255, 0.02);
+/* Modern Button Styles */
+.custom-button {
+  background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+  border: none;
   border-radius: var(--radius-md);
-  border-left: 3px solid var(--accent-blue);
-  transition: var(--transition-fast);
-}
-
-.message-field:hover {
-  background: rgba(255, 255, 255, 0.05);
-  border-left-color: var(--accent-purple);
-}
-
-/* Step Container for Modals */
-.step-container {
-  background: rgba(255, 255, 255, 0.03);
-  border-radius: var(--radius-md);
-  padding: var(--spacing-lg);
-  margin: var(--spacing-lg) 0;
-  border-left: 4px solid var(--accent-blue);
-}
-
-.step-container h3 {
-  color: var(--accent-blue);
-  margin-top: 0;
-  font-family: var(--font-display);
-}
-
-.step-container ul {
-  padding-left: var(--spacing-lg);
-}
-
-.step-container li {
-  margin: var(--spacing-sm) 0;
-  color: var(--text-secondary);
-}
-
-/* Privacy Section */
-.privacy-section {
-  background: rgba(0, 184, 148, 0.1);
-  border: 1px solid rgba(0, 184, 148, 0.3);
-  border-radius: var(--radius-md);
-  padding: var(--spacing-lg);
-  margin: var(--spacing-lg) 0;
-}
-
-.privacy-section h2 {
-  color: var(--accent-green);
-  margin-top: 0;
-}
-
-/* Credits Styling */
-.credits {
-  background: rgba(255, 255, 255, 0.02);
-  border-top: 1px solid var(--border-color);
-  padding: var(--spacing-lg) 0 0 0;
-  margin: var(--spacing-lg) 0 0 0;
+  color: white;
+  cursor: pointer;
+  font-family: var(--font-primary);
   font-size: 0.875rem;
-  color: var(--text-muted);
-  text-align: center;
+  font-weight: 500;
+  padding: var(--spacing-sm) var(--spacing-md);
+  transition: var(--transition-fast);
+  text-transform: none;
+  white-space: nowrap;
+  box-shadow: var(--shadow-md);
 }
 
-/* Processing Animation */
-.processing-animation {
-  margin: var(--spacing-lg) 0;
-}
-
-/* Enhanced hover effects for interactive elements */
-.barchart-div,
-.glass-effect {
-  transition: var(--transition-normal);
-}
-
-.barchart-div:hover {
-  transform: translateY(-4px);
+.custom-button:hover {
+  transform: translateY(-2px);
   box-shadow: var(--shadow-lg), var(--shadow-glow);
 }
 
-/* Chart container improvements */
-#main,
-#density_date,
-#density_time {
-  position: relative;
+.custom-button:active {
+  transform: translateY(0);
 }
 
-#main canvas {
+/* File Input Styling */
+input[type="file"] {
+  display: none;
+}
+
+.inputfile + label {
+  display: inline-block;
+  cursor: pointer;
+  background: linear-gradient(135deg, var(--accent-green), var(--accent-blue));
+  color: white;
+  padding: var(--spacing-md) var(--spacing-lg);
   border-radius: var(--radius-md);
-  background: rgba(255, 255, 255, 0.02);
+  font-weight: 500;
+  transition: var(--transition-fast);
+  box-shadow: var(--shadow-md);
 }
 
-/* Modern scrollbar for specific containers */
-#filters::-webkit-scrollbar,
-#message_displayer::-webkit-scrollbar {
-  width: 8px;
+.inputfile + label:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg), 0 0 20px rgba(0, 184, 148, 0.3);
 }
 
-#filters::-webkit-scrollbar-track,
-#message_displayer::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.05);
+/* Modal Styles */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background: rgba(10, 14, 39, 0.8);
+  backdrop-filter: blur(10px);
+  animation: modalFadeIn 0.3s ease;
+}
+
+@keyframes modalFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.modal-content {
+  background: var(--card-bg);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--border-color);
+  font-family: var(--font-primary);
+  font-size: 1rem;
+  line-height: 1.6;
+  margin: 5% auto;
+  padding: var(--spacing-2xl);
+  border-radius: var(--radius-xl);
+  width: 90%;
+  max-width: 700px;
+  box-shadow: var(--shadow-lg);
+  color: var(--text-primary);
+  position: relative;
+  overflow: hidden;
+}
+
+.modal-content::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple), var(--accent-green));
+}
+
+.modal-content h2 {
+  color: var(--text-primary);
+  font-family: var(--font-display);
+  font-weight: 600;
+  margin-top: 0;
+  background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.modal-content a {
+  color: var(--accent-blue);
+  text-decoration: none;
+  font-weight: 500;
+  transition: var(--transition-fast);
+}
+
+.modal-content a:hover {
+  color: var(--accent-purple);
+  text-decoration: underline;
+}
+
+.close {
+  color: var(--text-secondary);
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: var(--transition-fast);
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border-radius: var(--radius-sm);
 }
 
-#filters::-webkit-scrollbar-thumb,
-#message_displayer::-webkit-scrollbar-thumb {
-  background: var(--accent-blue);
-  border-radius: var(--radius-sm);
-}
-
-#filters::-webkit-scrollbar-thumb:hover,
-#message_displayer::-webkit-scrollbar-thumb:hover {
-  background: var(--accent-purple);
+.close:hover,
+.close:focus {
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.1);
+  text-decoration: none;
 }
 
 /* Layout Areas for Grid */
@@ -789,41 +737,4 @@ li:not(:first-child) {
 .panel-header,
 .filters-header {
   flex-shrink: 0;
-}
-
-/* Modern styling for density charts */
-#density_date svg {
-  background: rgba(255, 255, 255, 0.02);
-  border-radius: var(--radius-md);
-}
-
-#density_time svg {
-  background: rgba(255, 255, 255, 0.02);
-  border-radius: var(--radius-md);
-}
-
-#density_date .area {
-  fill: url(#dateGradient);
-  fill-opacity: 0.8;
-  stroke: var(--accent-blue);
-  stroke-width: 1px;
-  transition: var(--transition-normal);
-}
-
-#density_date .area:hover {
-  fill-opacity: 1;
-  filter: drop-shadow(0 0 8px rgba(0, 212, 255, 0.4));
-}
-
-#density_time .area {
-  fill: url(#timeGradient);
-  fill-opacity: 0.8;
-  stroke: var(--accent-purple);
-  stroke-width: 1px;
-  transition: var(--transition-normal);
-}
-
-#density_time .area:hover {
-  fill-opacity: 1;
-  filter: drop-shadow(0 0 8px rgba(108, 92, 231, 0.4));
 }

@@ -1,0 +1,396 @@
+/* Modern CSS Reset and Variables */
+:root {
+  /* Color Palette */
+  --primary-bg: #0a0e27;
+  --secondary-bg: #1a1d3a;
+  --accent-blue: #00d4ff;
+  --accent-purple: #6c5ce7;
+  --accent-green: #00b894;
+  --text-primary: #ffffff;
+  --text-secondary: #a0a3bd;
+  --text-muted: #6c7293;
+  --border-color: rgba(255, 255, 255, 0.1);
+  --card-bg: rgba(255, 255, 255, 0.05);
+  --glass-bg: rgba(255, 255, 255, 0.08);
+  
+  /* Spacing */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  --spacing-2xl: 3rem;
+  
+  /* Border Radius */
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  --shadow-glow: 0 0 20px rgba(0, 212, 255, 0.3);
+  
+  /* Typography */
+  --font-primary: 'Inter', 'Nunito', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-display: 'Space Grotesk', 'Didact Gothic', sans-serif;
+  
+  /* Transitions */
+  --transition-fast: all 0.15s ease;
+  --transition-normal: all 0.3s ease;
+  --transition-slow: all 0.5s ease;
+}
+
+/* Import modern fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background: linear-gradient(135deg, var(--primary-bg) 0%, var(--secondary-bg) 100%);
+  background-attachment: fixed;
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-primary);
+  color: var(--text-primary);
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+/* Modern Dashboard Layout */
+.dashboard-container {
+  display: grid;
+  grid-template-areas: 
+    "header header header"
+    "sidebar-left main sidebar-right"
+    "bottom-left bottom-center bottom-right";
+  grid-template-columns: 200px 1fr 300px;
+  grid-template-rows: auto 1fr 250px;
+  height: 100vh;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md);
+}
+
+/* Header Navigation */
+.navigation-bar {
+  grid-area: header;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-md) var(--spacing-lg);
+  margin: 0;
+  list-style: none;
+  box-shadow: var(--shadow-lg);
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin: 0;
+}
+
+.nav-actions {
+  display: flex;
+  gap: var(--spacing-sm);
+  align-items: center;
+}
+
+.nav-item {
+  float: none;
+}
+
+/* Modern Button Styles */
+.custom-button {
+  background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+  border: none;
+  border-radius: var(--radius-md);
+  color: white;
+  cursor: pointer;
+  font-family: var(--font-primary);
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding: var(--spacing-sm) var(--spacing-md);
+  transition: var(--transition-fast);
+  text-transform: none;
+  white-space: nowrap;
+  box-shadow: var(--shadow-md);
+}
+
+.custom-button:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg), var(--shadow-glow);
+}
+
+.custom-button:active {
+  transform: translateY(0);
+}
+
+/* Layout Areas */
+.sidebar-left {
+  grid-area: sidebar-left;
+}
+
+.main-content {
+  grid-area: main;
+}
+
+.sidebar-right {
+  grid-area: sidebar-right;
+}
+
+.bottom-left {
+  grid-area: bottom-left;
+}
+
+.bottom-center {
+  grid-area: bottom-center;
+}
+
+.bottom-right {
+  grid-area: bottom-right;
+}
+
+/* Chart and axis styling */
+.axis--x line {
+  stroke: var(--text-secondary);
+  stroke-width: 1px;
+}
+
+.axis--x path {
+  stroke: var(--text-secondary);
+  stroke-width: 1px;
+}
+
+.axis--x text {
+  fill: var(--text-secondary);
+  font-family: var(--font-primary);
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.axis--y line {
+  stroke: var(--text-secondary);
+  stroke-width: 1px;
+}
+
+.axis--y path {
+  stroke: var(--text-secondary);
+  stroke-width: 1px;
+}
+
+.axis--y text {
+  fill: var(--text-secondary);
+  font-family: var(--font-primary);
+  font-size: 12px;
+  font-weight: 400;
+}
+
+/* Modern Chart Containers */
+.barchart-div {
+  margin: var(--spacing-md) 0;
+  padding: var(--spacing-lg);
+  background: var(--card-bg);
+  backdrop-filter: blur(10px);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-color);
+  transition: var(--transition-normal);
+  position: relative;
+  overflow: hidden;
+  min-height: 150px;
+}
+
+.barchart-div::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+  transition: var(--transition-normal);
+}
+
+.barchart-div:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.barchart-div:hover::before {
+  width: 6px;
+  box-shadow: var(--shadow-glow);
+}
+
+/* Chart area styling */
+.area {
+  fill: url(#chartGradient);
+  clip-path: url(#clip);
+  transition: var(--transition-normal);
+}
+
+.zoom {
+  cursor: move;
+  fill: none;
+  pointer-events: all;
+}
+
+.tooltip {
+  position: absolute;
+  text-align: center;
+  min-width: 120px;
+  padding: var(--spacing-sm) var(--spacing-md);
+  font-family: var(--font-primary);
+  font-size: 12px;
+  background: lightsteelblue;
+  border: 0px;
+  border-radius: 8px;
+  pointer-events: none;
+}
+
+.bar {
+  fill: #2c7bb6;
+}
+
+.bar.mouseovered{
+  stroke: white
+}
+
+.bar-element {
+  cursor: pointer;
+}
+
+.unclicked{
+  opacity: 0.5
+}
+
+.title_barchart {
+  color: #A0A0A0;
+  font-family: "Nunito";
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.img-color {
+  cursor: pointer;
+}
+
+.legend_hist_num {
+  fill: #00a6ca;
+  font-family: "Nunito";
+  font-size: 12px;
+}
+
+.legend_hist_text {
+  fill: #A0A0A0;
+  font-family: "Nunito";
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.title {
+  font-family: "Nunito";
+  color: #A0A0A0;
+  font-size: 30px;
+  font-weight: bold;
+  margin-left: 20px;
+}
+
+.md_header {
+  color: #A0A0A0;
+  font-family: "Nunito";
+  font-size: 11px;
+  font-weight: bold;
+  margin: 0;
+}
+
+.md_text {
+  color: #FFFFFF;
+  font-family: "Nunito";
+  font-size: 11px;
+  margin: 0;
+}
+
+::-webkit-scrollbar {
+    width: 0.5em;
+}
+
+::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: darkgrey;
+  outline: 1px solid slategrey;
+}
+
+.custom-button {
+    border-radius: 4px;
+    border : none;
+    background-color: #A0A0A0;
+    font-family: "Nunito";
+    font-size: 16px;
+    font-weight: bold;
+    display: inline-block;
+    padding: 6px 12px;
+    margin-right: 10px;
+    vertical-align: middle;
+    cursor: pointer;
+}
+
+input[type="file"] {
+    display: none;
+}
+
+.modal {
+    display: none;      /* Hidden by default */
+    position: fixed;    /* Stay in place */
+    z-index: 1;         /* Sit on top */
+    padding-top: 100px; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%;        /* Full width */
+    height: 100%;       /* Full height */
+    overflow: auto;     /* Enable scroll if needed */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+    background-color: #fefefe;
+    font-family: "Nunito";
+    font-size: 16px;
+    margin: auto;
+    padding: 20px;
+    border-left-style: solid;
+    border-left-width: 10px;
+    border-left-color: #2c7bb6;
+    width: 45%;
+}
+
+/* The Close Button */
+.close {
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Timeline Debug</title>
+    <script src="js/d3.js"></script>
+    <style>
+        .debug-container {
+            margin: 20px;
+            padding: 20px;
+            border: 1px solid #ccc;
+        }
+        .area {
+            fill: steelblue;
+            opacity: 0.6;
+        }
+    </style>
+</head>
+<body>
+    <div class="debug-container">
+        <h2>Timeline Debug Test</h2>
+        <div id="test-density-date" style="border: 1px solid red; width: 400px; height: 200px;"></div>
+        <div id="test-density-time" style="border: 1px solid blue; width: 200px; height: 400px;"></div>
+    </div>
+
+    <script>
+        console.log("Starting timeline debug test...");
+        
+        // Simple test data
+        var testDateData = [
+            {key: new Date(2023, 0, 1), value: 10},
+            {key: new Date(2023, 1, 1), value: 20},
+            {key: new Date(2023, 2, 1), value: 15},
+            {key: new Date(2023, 3, 1), value: 25}
+        ];
+        
+        var testTimeData = [
+            {key: new Date(2000, 0, 1, 9, 0), value: 5},
+            {key: new Date(2000, 0, 1, 12, 0), value: 15},
+            {key: new Date(2000, 0, 1, 18, 0), value: 10},
+            {key: new Date(2000, 0, 1, 21, 0), value: 8}
+        ];
+        
+        // Test date density chart
+        try {
+            var dateContainer = d3.select("#test-density-date");
+            var dateSvg = dateContainer.append("svg")
+                .attr("width", 400)
+                .attr("height", 200);
+                
+            var x = d3.scaleTime()
+                .domain(d3.extent(testDateData, d => d.key))
+                .range([20, 380]);
+                
+            var y = d3.scaleLinear()
+                .domain([0, d3.max(testDateData, d => d.value)])
+                .range([180, 20]);
+                
+            var area = d3.area()
+                .x(d => x(d.key))
+                .y0(180)
+                .y1(d => y(d.value));
+                
+            dateSvg.append("path")
+                .datum(testDateData)
+                .attr("class", "area")
+                .attr("d", area);
+                
+            console.log("✓ Date density test chart created");
+        } catch (error) {
+            console.error("✗ Date density test failed:", error);
+        }
+        
+        // Test time density chart  
+        try {
+            var timeContainer = d3.select("#test-density-time");
+            var timeSvg = timeContainer.append("svg")
+                .attr("width", 200)
+                .attr("height", 400);
+                
+            var xTime = d3.scaleLinear()
+                .domain([0, d3.max(testTimeData, d => d.value)])
+                .range([0, 180]);
+                
+            var yTime = d3.scaleTime()
+                .domain(d3.extent(testTimeData, d => d.key))
+                .range([20, 380]);
+                
+            var areaTime = d3.area()
+                .y(d => yTime(d.key))
+                .x0(0)
+                .x1(d => xTime(d.value));
+                
+            timeSvg.append("path")
+                .datum(testTimeData)
+                .attr("class", "area")
+                .attr("d", areaTime)
+                .attr("transform", "translate(20, 0)");
+                
+            console.log("✓ Time density test chart created");
+        } catch (error) {
+            console.error("✗ Time density test failed:", error);
+        }
+    </script>
+</body>
+</html>

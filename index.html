@@ -1,14 +1,12 @@
 <!DOCTYPE html>
-
 <html lang="en">
 
 <head>
   <meta charset="utf-8">
-  <title>FBMessage Explorer - HTML Edition</title>
+  <title>FBMessage Explorer - Modern Edition</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" type="text/css" href="css/style.css">
   <link rel="icon" type="image/JPG" href="img/fb.jpg" />
-  <link href='https://fonts.googleapis.com/css?family=Nunito' rel='stylesheet'>
-  <link href='https://fonts.googleapis.com/css?family=Didact Gothic' rel='stylesheet'>
   <script async src="https://www.googletagmanager.com/gtag/js?id=UA-115468223-1"></script>
   <script src="js/d3.js"></script>
   <script src="js/crossfilter.js"></script>
@@ -20,209 +18,249 @@
   </script>
 </head>
 
-
 <body>
-  <ul class="navigation-bar">
-    <li class="title">FBMessage Explorer</li>
-    <li class="nav-item" style="float:right">
-      <button type="button" class="custom-button" id="ExploreBtn">
-        Explore your own data
-      </button>
-    </li>
-    <li class="nav-item" style="float:right">
-      <button type="button" class="custom-button" id="ExplanationBtn">
-        What is this ?
-      </button>
-    </li>
+  <div class="dashboard-container">
+    <!-- Header Navigation -->
+    <header class="navigation-bar">
+      <div class="title">📊 FBMessage Explorer</div>
+      <div class="nav-actions">
+        <button type="button" class="custom-button" id="ExplanationBtn">
+          ❓ What is this?
+        </button>
+        <button type="button" class="custom-button" id="ExploreBtn">
+          🔍 Explore your data
+        </button>
+        <button type="button" class="custom-button" onclick="reset_filters()">
+          🔄 Reset Filters
+        </button>
+      </div>
+    </header>
 
-    <li class="nav-item" style="float:right">
-      <input name="resetButton" class="custom-button" type="button" value="Reset All Filters"
-        onclick="reset_filters()" />
-    </li>
-  </ul>
-  <div id="density_time" style="display: inline-block; "></div>
-  <section id="main" style="display: inline-block; position: relative"></section>
-  <div id="filters" style="display: inline-block; overflow: scroll;">
-  </div>
-  <div id="place_holder" style="display: inline-block;"></div>
-  <div id="density_date" style="display: inline-block;"></div>
-  <!-- <input type="image" src="img/colors.svg" height="20" width="20"/> -->
+    <!-- Left Sidebar - Time Density -->
+    <aside id="density_time" class="sidebar-left glass-effect"></aside>
+    
+    <!-- Center - Main Visualization Area -->
+    <section id="main" class="main-content glass-effect">
+      <!-- Chart gradients will be added via JavaScript -->
+      <svg style="width: 0; height: 0; position: absolute;">
+        <defs>
+          <linearGradient id="chartGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" style="stop-color:#00d4ff;stop-opacity:0.8" />
+            <stop offset="100%" style="stop-color:#6c5ce7;stop-opacity:0.3" />
+          </linearGradient>
+          
+          <!-- Date density chart gradient -->
+          <linearGradient id="dateGradient" x1="0%" y1="100%" x2="0%" y2="0%">
+            <stop offset="0%" style="stop-color:#00d4ff;stop-opacity:0.2" />
+            <stop offset="50%" style="stop-color:#00d4ff;stop-opacity:0.6" />
+            <stop offset="100%" style="stop-color:#00d4ff;stop-opacity:0.9" />
+          </linearGradient>
+          
+          <!-- Time density chart gradient -->
+          <linearGradient id="timeGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" style="stop-color:#6c5ce7;stop-opacity:0.2" />
+            <stop offset="50%" style="stop-color:#6c5ce7;stop-opacity:0.6" />
+            <stop offset="100%" style="stop-color:#6c5ce7;stop-opacity:0.9" />
+          </linearGradient>
+        </defs>
+      </svg>
+    </section>
+    
+    <!-- Right Sidebar - Filters -->
+    <aside id="filters" class="sidebar-right">
+      <div class="filters-header">
+        <h2 class="text-gradient">📊 Analytics Filters</h2>
+        <p class="filters-subtitle">Click on bars to filter data</p>
+      </div>
+    </aside>
 
-  <div id="message_displayer" style="display: inline-block; overflow-y: scroll;overflow-x: hidden;">
-    <div id=md_thread>
-      <h3 class="md_header">Thread</h3>
-    </div>
-    <div id=md_sender>
-      <h3 class="md_header">Sender</h3>
-    </div>
-    <div id=md_datetime>
-      <h3 class="md_header">Date time</h3>
-    </div>
-    <div id=md_message>
-      <h3 class="md_header">Message</h3>
+    <!-- Bottom Left - Spacer -->
+    <div class="bottom-left spacer"></div>
+    
+    <!-- Bottom Center - Date Density Chart -->
+    <section id="density_date" class="bottom-center glass-effect">
+      <div class="chart-header">
+        <h3 class="text-gradient">📅 Timeline Distribution</h3>
+      </div>
+    </section>
+    
+    <!-- Bottom Right - Message Details Panel -->
+    <aside id="message_displayer" class="bottom-right glass-effect">
+      <div class="panel-header">
+        <h3 class="text-gradient">💬 Message Details</h3>
+        <p class="panel-subtitle">Hover over points to see details</p>
+      </div>
+      
+      <div id="md_thread" class="message-field">
+        <h4 class="md_header">Thread</h4>
+      </div>
+      
+      <div id="md_sender" class="message-field">
+        <h4 class="md_header">Sender</h4>
+      </div>
+      
+      <div id="md_datetime" class="message-field">
+        <h4 class="md_header">Date & Time</h4>
+      </div>
+      
+      <div id="md_message" class="message-field">
+        <h4 class="md_header">Message</h4>
+      </div>
+    </aside>
+  </div>
+
+  <!-- Modals -->
+  <div id="ExplanationModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>🤔 What is this?</h2>
+      <p>
+        This is a powerful tool that helps you explore and visualize your Facebook Messenger history from HTML exports. 
+        Discover patterns in your messaging habits, find your most active conversations, and explore your communication timeline.
+      </p>
+
+      <h2>📊 What am I seeing?</h2>
+      <p>
+        <strong>Central Visualization:</strong> Each dot represents a message you sent or received. The horizontal axis shows dates, 
+        and the vertical axis shows the time of day.<br><br>
+        
+        <strong>Density Charts:</strong> The left and bottom panels show message volume by time of day and date. 
+        Drag the brush areas to zoom into specific time periods.<br><br>
+        
+        <strong>Filter Panels:</strong> On the right, interactive charts let you filter by sender, conversation, day of week, 
+        and more. Click bars to focus on specific attributes.<br><br>
+        
+        <strong>Message Details:</strong> Hover over dots in the main view to see message content in the bottom-right panel.
+      </p>
+
+      <h2>🚀 How to get started</h2>
+      <p>
+        The data you see is demo data to help you understand the interface. Click "Explore your data" to upload 
+        your own Facebook Messenger export and discover insights about your messaging patterns!
+      </p>
+
+      <p class="credits">
+        <strong>Original Authors:</strong><br>
+        <a href="https://github.com/MathReynaud">Mathilde Reynaud</a> | 
+        <a href="https://github.com/adurivault">Augustin Durivault</a><br>
+        <strong>Modern HTML Version:</strong> Crispian Morris
+      </p>
     </div>
   </div>
+
+  <div id="ProcessingModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>⚡ Processing your data...</h2>
+      <div class="processing-animation">
+        <div class="skeleton pulse" style="height: 20px; margin: 10px 0;"></div>
+        <div class="skeleton pulse" style="height: 20px; margin: 10px 0; width: 80%;"></div>
+        <div class="skeleton pulse" style="height: 20px; margin: 10px 0; width: 60%;"></div>
+      </div>
+      <p>This may take up to a minute depending on your data size. Please be patient while we analyze your messages.</p>
+    </div>
+  </div>
+
+  <div id="ExploreModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>📥 Download your Messenger data from Facebook</h2>
+      <div class="step-container">
+        <h3>Step 1: Request your data</h3>
+        <ul>
+          <li>Visit <a href="https://www.facebook.com/your_information/" target="_blank">Facebook's data download page</a></li>
+          <li>Click "Download Your Information"</li>
+          <li>Select format: <strong>HTML</strong> (not JSON)</li>
+          <li>Include at least "Messages" in your selection</li>
+          <li>Click "Create file" and wait for the notification (~10 minutes)</li>
+          <li>Download and unzip the file</li>
+        </ul>
+      </div>
+
+      <div class="step-container">
+        <h3>Step 2: Upload your data</h3>
+        <div style="text-align: center; padding: 20px;">
+          <input id="file" type="file" class="inputfile" onchange="read_files(this.files)" webkitdirectory=true>
+          <label for="file" class="custom-button">📁 Select Messages Folder</label>
+        </div>
+        <p>Navigate to your Facebook archive and select the "messages" folder.</p>
+      </div>
+
+      <div class="privacy-section">
+        <h2>🔒 Your privacy is our priority</h2>
+        <p>
+          <strong>100% Local Processing:</strong> Your data never leaves your device. All analysis happens in your browser.<br><br>
+          
+          <strong>No Servers:</strong> We don't have servers to store your data, and we have no interest in it.<br><br>
+          
+          <strong>Open Source:</strong> All code is available on 
+          <a href="https://github.com/adurivault/FBMessage" target="_blank">GitHub</a> for full transparency.<br><br>
+          
+          <strong>Offline Capable:</strong> You can disconnect from the internet after loading - everything works offline.
+        </p>
+      </div>
+
+      <p class="credits">
+        <strong>Original Authors:</strong><br>
+        <a href="https://github.com/MathReynaud">Mathilde Reynaud</a> | 
+        <a href="https://github.com/adurivault">Augustin Durivault</a><br>
+        <strong>Modern HTML Version:</strong> Crispian Morris
+      </p>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/html-preprocessing.js" defer></script>
+  <script src="js/barchart.js" defer></script>
+  <script src="js/main.js" defer></script>
+
+  <!-- Enhanced Reset Filters Function -->
+  <script>
+    // Store original reset function to avoid conflicts
+    window.reset_filters_original = window.reset_filters;
+
+    function reset_filters() {
+      // Add loading animation
+      document.querySelectorAll('.barchart-div').forEach(div => {
+        div.style.opacity = '0.7';
+        div.style.transform = 'scale(0.98)';
+      });
+
+      // Reset functionality
+      if (typeof window.reset_filters_original === 'function') {
+        window.reset_filters_original();
+      } else {
+        // Original reset logic
+        barcharts.forEach(function(bc){bc.clicked = new Set()});
+        dimensions = barcharts.map(x=>x.dimension)
+        dimensions.forEach(function(dim) { dim.filter(null); });
+        
+        barcharts.forEach(function(bc) {
+          if (bc.name === "thread" && bc.search_input) {
+            bc.search_input.property("value", "");
+            bc.search_input.style("display", "none");
+            bc.searchTerm = "";
+            bc.isSearchFiltered = false;
+          }
+        });
+        
+        if (typeof update_all === 'function') {
+          update_all();
+        }
+        if (typeof initialize_brush === 'function') {
+          initialize_brush();
+        }
+      }
+
+      // Restore animations
+      setTimeout(() => {
+        document.querySelectorAll('.barchart-div').forEach(div => {
+          div.style.opacity = '';
+          div.style.transform = '';
+        });
+      }, 300);
+    }
+  </script>
 
 </body>
-
-<div id="ExplanationModal" style="overflow: scroll;" class="modal">
-  <div class="modal-content">
-    <span class="close">&times;</span>
-    <h2>What is this ?</h2>
-    <p>
-      This is a tool that helps you explore and visualize your own Facebook Messenger History from HTML exports.
-    </p>
-
-    <h2>What am I seeing ?</h2>
-    <p>
-      In the central pane, you can see all your messages. Horizontally you've got the date, and vertically the time of
-      day. Each dot represents a message that you sent or received.<br><br>
-      On the left, and below this central pane, you can see a graph showing the quantity of messages sent depending on
-      the date / the time of day. You can drag the edges of the zones to zoom in on a certain period.<br><br>
-      On the right side of the screen, there are a bunch of histograms. These histograms give you statistics about your
-      messages (number of messages sent, most active conversation, etc..), but more interestingly, they allow you to
-      filter your analysis. If you click on a bar, you can keep only the messages corresponding to this attribute, and
-      all the other graphs will update automatically. This way, you can analyse for example who sends more messages in a
-      particular conversation. Or what conversations are more active the week-end versus during the week.<br><br>
-      Finally, if you mouse over the dots in the central pane, you can see the content of each message in the bottom
-      right-hand corner of your screen.<br><br>
-    </p>
-
-    <h2>How to proceed ?</h2>
-    <p>
-      The data displayed behind this window is random data. Do some test to understand how it works, but then click on
-      "Explore your own data" to play with your messages.
-    </p>
-
-    <p>
-      Authors :
-      <a href="https://github.com/MathReynaud"> Mathilde Reynaud </a> |
-      <a href="https://github.com/adurivault"> Augustin Durivault </a> </br>
-      HTML Version by: Crispian Morris
-    </p>
-
-    </p>
-  </div>
-</div>
-
-<div id="ProcessingModal" style="overflow: scroll;" class="modal">
-  <div class="modal-content">
-    <span class="close">&times;</span>
-    <h2>Processing data ... </h2>
-    </p>It can take up to a minute</p>
-  </div>
-</div>
-
-<div id="ExploreModal" style="overflow: scroll;" class="modal">
-  <div class="modal-content">
-    <span class="close">&times;</span>
-    <h2> Download your Messenger data from Facebook </h2>
-    <p>
-      - Download your Facebook archive from <a href="https://www.facebook.com/your_information/"> this link</a>. <br>
-      - Click "Download Your Information" <br>
-      - Select the format "<strong>HTML</strong>" (not JSON) <br>
-      - Select at least "Messages" in the list of information to download <br>
-      - Click "Create file" and wait for the notification saying that your file is ready to download (around 10 minutes)
-      <br>
-      - Download the zip file, unzip it, and save it somewhere on your computer <br>
-    </p>
-
-    <h2> Show this application where the data is on your computer</h2>
-    <p>
-      - Click on the button below <br>
-    <div style="text-align:center; padding:30px ">
-      <input id="file" type="file" name="file" class="inputfile" onchange="read_files(this.files)" style="float:center"
-        webkitdirectory=true>
-      <label for="file" class="custom-button">Use your own file</label>
-    </div>
-    <br>
-
-    - Navigate to the Facebook archive you selected <br>
-    - Select the "messages" Folder and confirm <br>
-    </p>
-
-    <h2> We are not the NSA, Facebook, or Cambridge Analytica </h2>
-    <p>
-      You may (if you're using Chrome) get a warning saying that your data will be downloaded. While this can be
-      frightening, this is actually false. The data will be loaded <i>into your browser</i>, not on internet. Computations
-      will be done locally without a single piece of data leaving your computer.<br><br>
-      The truth is we don't have any interest in your data, we don't even have servers to store it. We are just 
-      students who want to empower you to do something cool with your data.<br><br>
-      All of the code behind this application is available <a href="https://github.com/adurivault/FBMessage">here </a>.
-      It means that anyone familiar with programming can check that this application does what we say it does, and only
-      what we say it does.<br><br>
-      If you are not familiar with programming, and you still do not trust us (Who can blame you ? This is written by
-      strangers on internet after all...) you can cut your internet connection before selecting the files. Once the
-      page is loaded, everything will work fine without internet. This way you can be absolutely sure that the data is
-      not sent to anybody.
-    </p>
-    <p>
-      Authors :
-      <a href="https://github.com/MathReynaud"> Mathilde Reynaud </a> |
-      <a href="https://github.com/adurivault"> Augustin Durivault </a> </br>
-      HTML Version by: Crispian Morris
-    </p>
-  </div>
-</div>
-<script src="js/html-preprocessing.js" defer></script>
-<script src="js/barchart.js" defer></script>
-<script src="js/main.js" defer></script>
-
-<script>
-// Modal functionality
-var explanationModal = document.getElementById("ExplanationModal");
-var exploreModal = document.getElementById("ExploreModal");
-var processingModal = document.getElementById("ProcessingModal");
-
-var explanationBtn = document.getElementById("ExplanationBtn");
-var exploreBtn = document.getElementById("ExploreBtn");
-
-var spans = document.getElementsByClassName("close");
-
-// When the user clicks on the button, open the modal
-explanationBtn.onclick = function() {
-  explanationModal.style.display = "block";
-}
-
-exploreBtn.onclick = function() {
-  exploreModal.style.display = "block";
-}
-
-// When the user clicks on <span> (x), close the modal
-for (var i = 0; i < spans.length; i++) {
-  spans[i].onclick = function() {
-    this.parentElement.parentElement.style.display = "none";
-  }
-}
-
-// When the user clicks anywhere outside of the modal, close it
-window.onclick = function(event) {
-  if (event.target == explanationModal) {
-    explanationModal.style.display = "none";
-  }
-  if (event.target == exploreModal) {
-    exploreModal.style.display = "none";
-  }
-  if (event.target == processingModal) {
-    processingModal.style.display = "none";
-  }
-}
-
-// Add reset filters function
-function reset_filters() {
-  if (typeof dim_sender !== 'undefined') dim_sender.filterAll();
-  if (typeof dim_date !== 'undefined') dim_date.filterAll();
-  if (typeof dim_time !== 'undefined') dim_time.filterAll();
-  if (typeof dim_weekday !== 'undefined') dim_weekday.filterAll();
-  if (typeof dim_sent !== 'undefined') dim_sent.filterAll();
-  
-  coloredBarchart = undefined;
-  cnt_reset += 1;
-  
-  if (typeof update_all === 'function') {
-    update_all();
-  }
-}
-</script>
-
 </html>
