@@ -4,7 +4,7 @@
 
 <head>
   <meta charset="utf-8">
-  <title>FBMessage Explorer</title>
+  <title>FBMessage Explorer - HTML Edition</title>
   <link rel="stylesheet" type="text/css" href="css/style.css">
   <link rel="icon" type="image/JPG" href="img/fb.jpg" />
   <link href='https://fonts.googleapis.com/css?family=Nunito' rel='stylesheet'>
@@ -70,7 +70,7 @@
     <span class="close">&times;</span>
     <h2>What is this ?</h2>
     <p>
-      This is a tool that helps you explore and visualize your own Facebook Messenger History.
+      This is a tool that helps you explore and visualize your own Facebook Messenger History from HTML exports.
     </p>
 
     <h2>What am I seeing ?</h2>
@@ -79,8 +79,8 @@
       day. Each dot represents a message that you sent or received.<br><br>
       On the left, and below this central pane, you can see a graph showing the quantity of messages sent depending on
       the date / the time of day. You can drag the edges of the zones to zoom in on a certain period.<br><br>
-      On the right side of the screen, there are a bunch of histograms. These histograms give you satistics about your
-      messages (number of messsages sent, most active conversation, etc..), but more interessantly, they allow you to
+      On the right side of the screen, there are a bunch of histograms. These histograms give you statistics about your
+      messages (number of messages sent, most active conversation, etc..), but more interestingly, they allow you to
       filter your analysis. If you click on a bar, you can keep only the messages corresponding to this attribute, and
       all the other graphs will update automatically. This way, you can analyse for example who sends more messages in a
       particular conversation. Or what conversations are more active the week-end versus during the week.<br><br>
@@ -98,6 +98,7 @@
       Authors :
       <a href="https://github.com/MathReynaud"> Mathilde Reynaud </a> |
       <a href="https://github.com/adurivault"> Augustin Durivault </a> </br>
+      HTML Version by: Crispian Morris
     </p>
 
     </p>
@@ -119,14 +120,14 @@
     <p>
       - Download your Facebook archive from <a href="https://www.facebook.com/your_information/"> this link</a>. <br>
       - Click "Download Your Information" <br>
-      - Select the format "JSON" <br>
+      - Select the format "<strong>HTML</strong>" (not JSON) <br>
       - Select at least "Messages" in the list of information to download <br>
       - Click "Create file" and wait for the notification saying that your file is ready to download (around 10 minutes)
       <br>
-      - Donwload the zip file, unzip it, and save it somewhere on your computer <br>
+      - Download the zip file, unzip it, and save it somewhere on your computer <br>
     </p>
 
-    <h2> Show this application where the data is on your computer to this application</h2>
+    <h2> Show this application where the data is on your computer</h2>
     <p>
       - Click on the button below <br>
     <div style="text-align:center; padding:30px ">
@@ -137,21 +138,21 @@
     <br>
 
     - Navigate to the Facebook archive you selected <br>
-    - Select the "message" Folder and confirm <br>
+    - Select the "messages" Folder and confirm <br>
     </p>
 
     <h2> We are not the NSA, Facebook, or Cambridge Analytica </h2>
     <p>
       You may (if you're using Chrome) get a warning saying that your data will be downloaded. While this can be
-      frightening, this is actually false. The data will loaded <i>into your browser</i>, not on internet. Computations
+      frightening, this is actually false. The data will be loaded <i>into your browser</i>, not on internet. Computations
       will be done locally without a single piece of data leaving your computer.<br><br>
-      The truth is we don't have any interest in your data, we don't even have servers to store it. We are just two
+      The truth is we don't have any interest in your data, we don't even have servers to store it. We are just 
       students who want to empower you to do something cool with your data.<br><br>
       All of the code behind this application is available <a href="https://github.com/adurivault/FBMessage">here </a>.
       It means that anyone familiar with programming can check that this application does what we say it does, and only
       what we say it does.<br><br>
       If you are not familiar with programming, and you still do not trust us (Who can blame you ? This is written by
-      two strangers on internet after all...) you can cut your internet connexion before selecting the files. Once the
+      strangers on internet after all...) you can cut your internet connection before selecting the files. Once the
       page is loaded, everything will work fine without internet. This way you can be absolutely sure that the data is
       not sent to anybody.
     </p>
@@ -159,11 +160,69 @@
       Authors :
       <a href="https://github.com/MathReynaud"> Mathilde Reynaud </a> |
       <a href="https://github.com/adurivault"> Augustin Durivault </a> </br>
+      HTML Version by: Crispian Morris
     </p>
   </div>
 </div>
-<script src="js/pre-processing.js"></script>
-<script src="js/barchart.js"></script>
-<script src="js/main.js"></script>
+<script src="js/html-preprocessing.js" defer></script>
+<script src="js/barchart.js" defer></script>
+<script src="js/main.js" defer></script>
+
+<script>
+// Modal functionality
+var explanationModal = document.getElementById("ExplanationModal");
+var exploreModal = document.getElementById("ExploreModal");
+var processingModal = document.getElementById("ProcessingModal");
+
+var explanationBtn = document.getElementById("ExplanationBtn");
+var exploreBtn = document.getElementById("ExploreBtn");
+
+var spans = document.getElementsByClassName("close");
+
+// When the user clicks on the button, open the modal
+explanationBtn.onclick = function() {
+  explanationModal.style.display = "block";
+}
+
+exploreBtn.onclick = function() {
+  exploreModal.style.display = "block";
+}
+
+// When the user clicks on <span> (x), close the modal
+for (var i = 0; i < spans.length; i++) {
+  spans[i].onclick = function() {
+    this.parentElement.parentElement.style.display = "none";
+  }
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+  if (event.target == explanationModal) {
+    explanationModal.style.display = "none";
+  }
+  if (event.target == exploreModal) {
+    exploreModal.style.display = "none";
+  }
+  if (event.target == processingModal) {
+    processingModal.style.display = "none";
+  }
+}
+
+// Add reset filters function
+function reset_filters() {
+  if (typeof dim_sender !== 'undefined') dim_sender.filterAll();
+  if (typeof dim_date !== 'undefined') dim_date.filterAll();
+  if (typeof dim_time !== 'undefined') dim_time.filterAll();
+  if (typeof dim_weekday !== 'undefined') dim_weekday.filterAll();
+  if (typeof dim_sent !== 'undefined') dim_sent.filterAll();
+  
+  coloredBarchart = undefined;
+  cnt_reset += 1;
+  
+  if (typeof update_all === 'function') {
+    update_all();
+  }
+}
+</script>
 
 </html>
