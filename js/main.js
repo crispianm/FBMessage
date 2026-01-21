@@ -347,8 +347,8 @@ function initialize_barchart_parameters() {
         .style("display", "flex")
         .style("align-items", "center")
         .style("justify-content", "space-between")
-        .style("margin-bottom", "var(--spacing-md)")
-        .style("padding-bottom", "var(--spacing-md)")
+  .style("margin-bottom", "var(--spacing-sm)")
+  .style("padding-bottom", "var(--spacing-sm)")
         .style("border-bottom", "1px solid var(--border-color)")
 
     // Left side - icon and title
@@ -508,7 +508,8 @@ function updateScalesAndElements() {
   // Update barchart scales
   barcharts.forEach(function(bc) {
     if (bc.xScale) {
-      bc.xScale.range([0, w3]);
+  // Always sync bar chart scales to current filter panel width
+  bc.xScale.range([0, w3]);
     }
   });
   
@@ -722,6 +723,12 @@ function draw_barcharts(){
         bc.nested_data = bc.group.top(bc.n_bars)
       };
     }
+
+    // Re-sync xScale range to current container width before rendering
+    try {
+      var cW = Math.max(0, bc.div_body.node().getBoundingClientRect().width - (margin3.left + margin3.right));
+      if (bc.xScale && cW > 0) { bc.xScale.range([0, cW]); }
+    } catch(e) {}
 
     bc.div_body.select("svg").remove()
     chart(bc)

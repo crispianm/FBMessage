@@ -1,0 +1,97 @@
+{
+  "participants": [
+    "Alice Smith",
+    "Bob Johnson",
+    "Carol Davis"
+  ],
+  "threadName": "Group Chat Example",
+  "messages": [
+    {
+      "isUnsent": false,
+      "media": [],
+      "reactions": [
+        {
+          "reaction": "👍",
+          "actor": "Bob Johnson"
+        }
+      ],
+      "senderName": "Alice Smith",
+      "text": "Hey everyone! How's it going?",
+      "timestamp": 1742313757566,
+      "type": "Generic"
+    },
+    {
+      "isUnsent": false,
+      "media": [
+        {
+          "uri": "messages/media/image_1.jpg",
+          "creation_timestamp": 1742313757500
+        }
+      ],
+      "reactions": [],
+      "senderName": "Bob Johnson",
+      "text": "",
+      "timestamp": 1742316759591,
+      "type": "Generic"
+    },
+    {
+      "isUnsent": false,
+      "media": [],
+      "reactions": [],
+      "senderName": "Carol Davis",
+      "text": "Good thanks! That's a nice photo Bob 📸",
+      "timestamp": 1742317107090,
+      "type": "Generic"
+    },
+    {
+      "isUnsent": false,
+      "media": [],
+      "reactions": [],
+      "senderName": "Alice Smith",
+      "sticker": {
+        "uri": "messages/stickers/sticker_1.webp"
+      },
+      "timestamp": 1742317133341,
+      "type": "Generic"
+    },
+    {
+      "isUnsent": false,
+      "gifs": [
+        {
+          "uri": "messages/gifs/gif_1.gif"
+        }
+      ],
+      "reactions": [],
+      "senderName": "Bob Johnson",
+      "timestamp": 1742317215144,
+      "type": "Generic"
+    },
+    {
+      "isUnsent": true,
+      "media": [],
+      "reactions": [],
+      "senderName": "Carol Davis",
+      "text": "This message was unsent",
+      "timestamp": 1742317270700,
+      "type": "Generic"
+    },
+    {
+      "isUnsent": false,
+      "media": [],
+      "reactions": [
+        {
+          "reaction": "❤️",
+          "actor": "Alice Smith"
+        },
+        {
+          "reaction": "😂",
+          "actor": "Carol Davis"
+        }
+      ],
+      "senderName": "Carol Davis",
+      "text": "See you all later! 👋",
+      "timestamp": 1742317359601,
+      "type": "Generic"
+    }
+  ]
+}

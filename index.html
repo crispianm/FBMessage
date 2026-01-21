@@ -68,7 +68,7 @@
     
     <!-- Right Sidebar - Filters -->
     <aside id="filters" class="sidebar-right">
-      <div class="filters-header">
+      <div class="filters-header" style="word-break: break-word; overflow: visible;">
         <h2 class="text-gradient">📊 Analytics Filters</h2>
         <p class="filters-subtitle">Click on bars to filter data</p>
       </div>
@@ -80,7 +80,7 @@
     <!-- Bottom Center - Date Density Chart -->
     <section id="density_date" class="bottom-center glass-effect">
       <div class="chart-header">
-        <h3 class="text-gradient">📅 Timeline Distribution</h3>
+        <h3 class="text-gradient"><span class="emoji-neutral">📅</span> Timeline Distribution</h3>
       </div>
     </section>
     
@@ -88,7 +88,6 @@
     <aside id="message_displayer" class="bottom-right glass-effect">
       <div class="panel-header">
         <h3 class="text-gradient">💬 Message Details</h3>
-        <p class="panel-subtitle">Hover over points to see details</p>
       </div>
       
       <div id="md_thread" class="message-field">
@@ -140,9 +139,6 @@
       </p>
 
       <p class="credits">
-        <strong>Original Authors:</strong><br>
-        <a href="https://github.com/MathReynaud">Mathilde Reynaud</a> | 
-        <a href="https://github.com/adurivault">Augustin Durivault</a><br>
         <strong>Modern HTML Version:</strong> Crispian Morris
       </p>
     </div>
@@ -170,7 +166,7 @@
         <ul>
           <li>Visit <a href="https://www.facebook.com/your_information/" target="_blank">Facebook's data download page</a></li>
           <li>Click "Download Your Information"</li>
-          <li>Select format: <strong>HTML</strong> (not JSON)</li>
+          <li>Select format: <strong>HTML</strong> or <strong>JSON</strong></li>
           <li>Include at least "Messages" in your selection</li>
           <li>Click "Create file" and wait for the notification (~10 minutes)</li>
           <li>Download and unzip the file</li>
@@ -180,30 +176,14 @@
       <div class="step-container">
         <h3>Step 2: Upload your data</h3>
         <div style="text-align: center; padding: 20px;">
-          <input id="file" type="file" class="inputfile" onchange="read_files(this.files)" webkitdirectory=true>
+          <input id="file" type="file" class="inputfile" onchange="read_files_unified(this.files)" webkitdirectory=true>
           <label for="file" class="custom-button">📁 Select Messages Folder</label>
         </div>
-        <p>Navigate to your Facebook archive and select the "messages" folder.</p>
+        <p>Navigate to your Facebook archive and select the "messages" folder. The tool supports both HTML and JSON message formats.</p>
       </div>
 
-      <div class="privacy-section">
-        <h2>🔒 Your privacy is our priority</h2>
-        <p>
-          <strong>100% Local Processing:</strong> Your data never leaves your device. All analysis happens in your browser.<br><br>
-          
-          <strong>No Servers:</strong> We don't have servers to store your data, and we have no interest in it.<br><br>
-          
-          <strong>Open Source:</strong> All code is available on 
-          <a href="https://github.com/adurivault/FBMessage" target="_blank">GitHub</a> for full transparency.<br><br>
-          
-          <strong>Offline Capable:</strong> You can disconnect from the internet after loading - everything works offline.
-        </p>
-      </div>
 
       <p class="credits">
-        <strong>Original Authors:</strong><br>
-        <a href="https://github.com/MathReynaud">Mathilde Reynaud</a> | 
-        <a href="https://github.com/adurivault">Augustin Durivault</a><br>
         <strong>Modern HTML Version:</strong> Crispian Morris
       </p>
     </div>
@@ -211,6 +191,7 @@
 
   <!-- Scripts -->
   <script src="js/html-preprocessing.js" defer></script>
+  <script src="js/json-preprocessing.js" defer></script>
   <script src="js/barchart.js" defer></script>
   <script src="js/main.js" defer></script>
 
